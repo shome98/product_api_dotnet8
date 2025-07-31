@@ -4,14 +4,21 @@ using product_api_dotnet8.Db;
 var builder = WebApplication.CreateBuilder(args);
 // Register DapperContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionStringPostgres = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or invalid.");
 }
+if (string.IsNullOrEmpty(connectionStringPostgres))
+{
+    throw new InvalidOperationException("Connection string for Postgres 'DefaultConnection' is missing or invalid.");
+}
 builder.Services.AddSingleton<DapperContext>(sp => new DapperContext(connectionString));
+builder.Services.AddSingleton<DapperContextPostgres>(sp => new DapperContextPostgres(connectionStringPostgres));
 
 // Register DataContextDapper
 builder.Services.AddScoped<DataContextDapper>();
+builder.Services.AddScoped<DataContextPostgres>();
 
 builder.Services.AddControllers();
 // Add services to the container.
