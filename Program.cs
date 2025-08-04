@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using product_api_dotnet8.controllers;
 using product_api_dotnet8.Db;
 
@@ -25,7 +26,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<DataContextEFPostgres>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionPostgres")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
