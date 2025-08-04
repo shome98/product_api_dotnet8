@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Register DapperContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var connectionStringPostgres = builder.Configuration.GetConnectionString("DefaultConnectionPostgres");
+var connectionStringPostgresNeon = builder.Configuration.GetConnectionString("DefaultConnectionPostgresNeon");
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or invalid.");
@@ -26,8 +27,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// builder.Services.AddDbContext<DataContextEFPostgres>(options =>
+//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionPostgres")));
 builder.Services.AddDbContext<DataContextEFPostgres>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionPostgres")));
+    options.UseNpgsql(connectionStringPostgresNeon));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
